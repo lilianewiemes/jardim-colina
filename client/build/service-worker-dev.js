@@ -16,11 +16,3 @@ self.addEventListener('activate', () => {
   })
 })
 
-self.addEventListener('push', e => {
-  console.log('passou aqui')
-  const data = e.data.json()
-  self.registration.showNotification(data.title, {
-    body: 'Boa noite, amanhã é o seu dia de trocar o lixo. Obrigado!',
-    icon: './static/img/icons/favicon-32x32.png'
-  })
-})

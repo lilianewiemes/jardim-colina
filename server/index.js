@@ -25,20 +25,20 @@ if (process.env.NODE_ENV === 'production') {
     app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
 }
 
+
+
 // Push notification
 const publicKey = 'BAuTSW2A6oxQFnXdeLeYMoucLtN9NfQVSW742Z0kVX0i5KWrZKgld6aUjtJCNY0Qn4A6gcOwfZh3Z4JJup8CR8c'
 const privateKey = '-455QQNHD_m3PhSwryS-74cvyX47EErRaLME0f85nDE'
 
 webPush.setVapidDetails('mailto:teste@teste.com', publicKey, privateKey)
 
+const payload = JSON.stringify({ title: 'Jardim da Colina',
+body: 'Boa noite, amanhã é o seu dia de trocar o lixo. Obrigado!' })
+
 app.post('/subscribe', (req, res) => {
     const subscription = req.body
-
-    res.status(201).json({})
-    
-    const payload = JSON.stringify({ title: 'Jardim da Colina' })
-
-    webPush.sendNotification(subscription, payload).catch(err => console.log(err))
+    webPush.sendNotification(JSON.stringify(subscription), payload).catch(err => console.log(err))
 })
 
 // Port

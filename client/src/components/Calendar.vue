@@ -37,7 +37,7 @@ import axios from 'axios'
 import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
 
-const url = 'api/app/'
+// const url = 'api/app/'
 
 export default {
   components: { VueCal },
@@ -49,9 +49,13 @@ export default {
     }
   },
   created () {
-    this.getEvents(url)
+    // this.getEvents(url)
     this.apto = localStorage.getItem('apto')
     // this.checkDay()
+
+    self.addEventListener('push', this.displayNotification)
+
+    this.createNotificationSubscription()
   },
   methods: {
     getEvents (url) {
@@ -91,6 +95,23 @@ export default {
           reg.showNotification('Jardim da Colina', options)
         })
       }
+    },
+    createNotificationSubscription () {
+      const publicKey = 'BAuTSW2A6oxQFnXdeLeYMoucLtN9NfQVSW742Z0kVX0i5KWrZKgld6aUjtJCNY0Qn4A6gcOwfZh3Z4JJup8CR8c'
+      navigator.serviceWorker.ready.then(function (serviceWorker) {
+        serviceWorker.pushManager
+          .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: publicKey
+          })
+          .then(function (subscription) {
+            console.log('User is subscribed.', subscription)
+            axios.post('api/subscribe', subscription)
+          })
+          .catch((err) => {
+            console.log('erro.', err)
+          })
+      })
     }
     // checkDay () {
     //   setInterval(this.displayNotification, 10000)

@@ -18,24 +18,6 @@
       (window.location.protocol === 'https:' || isLocalhost)) {
       navigator.serviceWorker.register('service-worker.js')
         .then(function (registration) {
-          // push notification
-          const publicKey = 'BAuTSW2A6oxQFnXdeLeYMoucLtN9NfQVSW742Z0kVX0i5KWrZKgld6aUjtJCNY0Qn4A6gcOwfZh3Z4JJup8CR8c'
-
-          registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(publicKey)
-          })
-            .then((subscription) => {
-              fetch('/subscribe', {
-                method: 'POST',
-                body: JSON.stringify(subscription),
-                headers: {
-                  'content-type': 'application/json'
-                }
-              })
-            })
-            .catch(err => console.log(err))
-
           // updatefound is fired if service-worker.js changes.
           registration.onupdatefound = function () {
             // updatefound is also fired the very first time the SW is installed,
